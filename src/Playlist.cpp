@@ -9,9 +9,25 @@ Playlist::Playlist(const std::string& name)
 // TODO: Fix memory leaks!
 // Students must fix this in Phase 1
 Playlist::~Playlist() {
-    #ifdef DEBUG
-    std::cout << "Destroying playlist: " << playlist_name << std::endl;
-    #endif
+
+    PlaylistNode* current = head;
+    // Loop continues until the current pointer reaches nullptr (the end of the list)
+    while (current != nullptr) {
+        
+        // 1. SAVE the pointer to the next node BEFORE deletion.
+        PlaylistNode* nextNode = current->next;
+        
+        // 2. DELETE the current node. 
+        //    (This calls the ~PlaylistNode() destructor, which handles the AudioTrack.)
+        delete current;
+        
+        // 3. MOVE to the next saved node to continue the loop.
+        current = nextNode;
+    }
+    
+    // Optional, but good practice: set head to nullptr after the list is clear.
+    head = nullptr; 
+
 }
 
 void Playlist::add_track(AudioTrack* track) {
@@ -49,7 +65,7 @@ void Playlist::remove_track(const std::string& title) {
         } else {
             head = current->next;
         }
-
+        delete current;
         track_count--;
         std::cout << "Removed '" << title << "' from playlist" << std::endl;
 
