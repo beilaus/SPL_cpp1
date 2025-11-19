@@ -55,7 +55,13 @@ return base_score;
     
 }
 
+
 PointerWrapper<AudioTrack> MP3Track::clone() const {
-    // TODO: Implement polymorphic cloning
-    return PointerWrapper<AudioTrack>(new MP3Track(*this));
+    try {
+        MP3Track* newTrack = new MP3Track(*this);
+        return PointerWrapper<AudioTrack>(newTrack);
+    }
+    catch (const std::bad_alloc& e) {
+        return PointerWrapper<AudioTrack>(); 
+    }
 }

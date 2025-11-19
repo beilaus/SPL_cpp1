@@ -64,7 +64,28 @@ bool DJSession::load_playlist(const std::string& playlist_name)  {
  */
 int DJSession::load_track_to_controller(const std::string& track_name) {
     // Your implementation here
-    return 0; // Placeholder
+    AudioTrack* a= library_service.findTrack(track_name);
+    if(a==nullptr){
+        std::cout <<"Log error: [ERROR] Track: \""<<track_name<<"\" not found in library\n";
+        stats.errors++;
+        return 0;
+    }
+    std::cout<<"[System] Loading track \""<<track_name<<"\" to controller...\n";
+    int n=controller_service.loadTrackToCache(*a);
+    if(n==1){
+        stats.cache_hits++;
+
+    }
+    if(n==0){
+        stats.cache_misses++;
+    }
+    if(n==-1){
+        stats.cache_misses++;
+        stats.cache_evictions++;
+    }
+    return n;
+
+
 }
 
 /**
@@ -75,8 +96,29 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
  */
 bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
     std::cout << "[System] Delegating track transfer to MixingEngineService for: " << track_title << std::endl;
-    // your implementation here
-    return false; // Placeholder
+    AudioTrack* a= controller_service.getTrackFromCache(track_title);
+    if(a==nullptr){
+        std::cout <<"[ERROR] Track: \""<<track_title<<"\" not found in cache\n";
+        stats.errors++;
+        return false;
+    }
+    int n=mixing_service.loadTrackToDeck(*a);
+    if(n==0){
+        stats.deck_loads_a++;
+        stats.transitions++;
+    }
+    if(n==1){
+        stats.deck_loads_b++;
+        stats.transitions++;
+    }
+    if(n==-1){
+        std::cout<<"error\n";
+        stats.errors++;
+        return false;
+
+    }
+    return true;
+
 }
 
 /**
@@ -108,7 +150,22 @@ void DJSession::simulate_dj_performance() {
     std::cout << "\n--- Processing Tracks ---" << std::endl;
 
     std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
-    // Your implementation here
+    if(play_all){
+
+// needed to be implemented
+    }
+    else{
+        while(true){
+        
+        std::string s= display_playlist_menu_from_config();
+        if(s==""){
+            break;
+        }
+        bool a = load_playlist(s);
+        
+
+
+    }
 }
 
 

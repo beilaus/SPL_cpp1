@@ -77,8 +77,8 @@ public:
         if(this!=&other){
             delete ptr;
             ptr=other.ptr;
+            other.ptr=0;
         }
-        other.ptr=0;
         return *this;
     }
 
@@ -153,7 +153,7 @@ public:
      * Why might the explicit keyword be important here?
      */
     explicit operator bool() const {
-        return false; //placeholder
+        return ptr;
     }
 
     /**
