@@ -20,7 +20,9 @@ struct PlaylistNode {
     PlaylistNode* next;
 
     PlaylistNode(AudioTrack* t) : track(t), next(nullptr) {}
-    ~PlaylistNode() = default;
+    ~PlaylistNode(){
+        delete track;
+    }
 };
 
 class Playlist {
@@ -39,6 +41,7 @@ public:
      * Destructor
      */
     ~Playlist();
+    
 
     /**
      * Add a track to the playlist
@@ -86,6 +89,7 @@ public:
      */
     std::vector<AudioTrack*> getTracks() const;
 
+    void reset_playlist(std::string new_name);
 };
 
 

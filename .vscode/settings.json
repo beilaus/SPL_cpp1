@@ -1,10 +1,11 @@
 {
     // Disable GitHub Copilot
     "github.copilot.enable": {
-        "*": false,
+        "*": true,
         "plaintext": false,
         "markdown": false,
-        "cpp": false,
+        "scminput": false,
+        "cpp": true,
         "c": false,
         "h": false
     },
@@ -97,7 +98,8 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "variant": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "filesystem": "cpp"
     },
     
     // Editor settings for academic integrity

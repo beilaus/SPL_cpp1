@@ -26,6 +26,7 @@ int DJControllerService::loadTrackToCache(AudioTrack& track) {
     PointerWrapper<AudioTrack> newPtr(trckPtr);
     bool put = cache.put(std::move(newPtr));
     if(put){
+        newPtr.release();
         return -1;
     }
     return 0;

@@ -11,23 +11,27 @@ Playlist::Playlist(const std::string& name)
 Playlist::~Playlist() {
 
     PlaylistNode* current = head;
-    // Loop continues until the current pointer reaches nullptr (the end of the list)
     while (current != nullptr) {
-        
-        // 1. SAVE the pointer to the next node BEFORE deletion.
         PlaylistNode* nextNode = current->next;
-        
-        // 2. DELETE the current node. 
-        //    (This calls the ~PlaylistNode() destructor, which handles the AudioTrack.)
         delete current;
-        
-        // 3. MOVE to the next saved node to continue the loop.
         current = nextNode;
     }
     
-    // Optional, but good practice: set head to nullptr after the list is clear.
-    head = nullptr; 
+   
+    
 
+}
+
+void Playlist::reset_playlist(std::string new_name){
+    PlaylistNode* current = head;
+    while (current != nullptr) {
+        PlaylistNode* nextNode = current->next;
+        delete current;
+        current = nextNode;
+    }
+    track_count = 0;
+    head=0;
+    playlist_name = std::move(new_name);
 }
 
 void Playlist::add_track(AudioTrack* track) {
@@ -35,11 +39,7 @@ void Playlist::add_track(AudioTrack* track) {
         std::cout << "[Error] Cannot add null track to playlist" << std::endl;
         return;
     }
-
-    // Create new node - this allocates memory!
     PlaylistNode* new_node = new PlaylistNode(track);
-
-    // Add to front of list
     new_node->next = head;
     head = new_node;
     track_count++;
@@ -142,3 +142,4 @@ std::vector<AudioTrack*> Playlist::getTracks() const {
     }
     return tracks;
 }
+
