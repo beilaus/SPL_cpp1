@@ -170,13 +170,13 @@ void DJSession::simulate_dj_performance() {
             }
 
         }
-        std::cout << " Session cancelled by user or all playlists played." << std::endl;
+        std::cout << "Session cancelled by user or all playlists played." << std::endl;
 
     }
     else {                                                                           //INTERACTIVE MODE
         std::string interactivePlaylist = display_playlist_menu_from_config();
         if(interactivePlaylist == ""){
-            std::cout << "[CANCEL] Returning..." << std::endl;
+            std::cout << "[CANCEL] Returning..." << "\n";
             return;
         }
         while(interactivePlaylist != ""){
@@ -185,25 +185,24 @@ void DJSession::simulate_dj_performance() {
                 std::cout << " [ERROR] playlist loading failed, please try again" << std::endl;
                 interactivePlaylist = display_playlist_menu_from_config(); //Prompting user after loading failure.
                 if(interactivePlaylist == ""){
-                    std::cout << "[CANCEL] Returning..." << std::endl;
+                    std::cout << "[CANCEL] Returning..." << "\n";
                     return;
                 }
                 added=load_playlist(interactivePlaylist);
             }   
             for(const std::string& track:track_titles){
-                std::cout << "\n–- Processing: "<< track << "–-" << std::endl;
+                std::cout << "\n–- Processing: "<< track << "–-" << "\n";
                 stats.tracks_processed++;
                 load_track_to_controller(track);
                 load_track_to_mixer_deck(track); 
             }
-
             print_session_summary();
             stats.tracks_processed = 0,stats.cache_hits = 0,stats.cache_misses = 0,
             stats.cache_evictions = 0,stats.deck_loads_a = 0,stats.deck_loads_b = 0,
             stats.transitions = 0,stats.errors = 0;
             interactivePlaylist = display_playlist_menu_from_config();
         }
-        std::cout << " Session cancelled by user or all playlists played." << std::endl;
+        std::cout << "Session cancelled by user or all playlists played." << "\n";
     }
 }
 
