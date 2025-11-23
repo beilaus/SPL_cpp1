@@ -75,31 +75,31 @@ AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
 
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
-    std::cout << " [INFO] Loading playlist: " << playlist_name << std::endl;
-    playlist.reset_playlist(playlist_name);
+    std::cout << "[INFO] Loading playlist: " << playlist_name << std::endl;
+    playlist.reset(playlist_name); //helper function to reset playlist
     int counter = 0; //Counting tracks added
     int size = library.size();
     for(int lib_index : track_indices){
         if(lib_index < 1 || lib_index > size){
-            std::cout << "  [WARNING] Invalid track index: " << lib_index << std::endl;
+            std::cout << "[WARNING] Invalid track index: " << lib_index << std::endl;
             
         }
         else{
             PointerWrapper<AudioTrack> clone_track = library[lib_index-1]->clone();
             AudioTrack* clonePtr = clone_track.release();
             if(clonePtr==nullptr){
-                std::cout<< "  [ERROR] Track: failed to clone " << std::endl;
+                std::cout<< "[ERROR] Track: failed to clone " << std::endl;
             }
             else{
                 clonePtr->load();
                 clonePtr->analyze_beatgrid();
                 playlist.add_track(clonePtr);
                 counter++;
-                std::cout << " Added '" << clonePtr->get_title() << "' to playlist '" << playlist_name << "'" << std::endl;
+                std::cout << "Added '" << clonePtr->get_title() << "' to playlist '" << playlist_name << "'" << std::endl;
             }
 
         }
-        std::cout << " [INFO] Playlist loaded: " << playlist_name << " (" << counter << " tracks)" << std::endl;
+        std::cout << "[INFO] Playlist loaded: " << playlist_name << " (" << counter << " tracks)" << std::endl;
     }
     
 }

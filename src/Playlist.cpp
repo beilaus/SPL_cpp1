@@ -9,29 +9,12 @@ Playlist::Playlist(const std::string& name)
 // TODO: Fix memory leaks!
 // Students must fix this in Phase 1
 Playlist::~Playlist() {
-
     PlaylistNode* current = head;
     while (current != nullptr) {
         PlaylistNode* nextNode = current->next;
         delete current;
         current = nextNode;
     }
-    
-   
-    
-
-}
-
-void Playlist::reset_playlist(std::string new_name){
-    PlaylistNode* current = head;
-    while (current != nullptr) {
-        PlaylistNode* nextNode = current->next;
-        delete current;
-        current = nextNode;
-    }
-    track_count = 0;
-    head=0;
-    playlist_name = std::move(new_name);
 }
 
 void Playlist::add_track(AudioTrack* track) {
@@ -141,5 +124,17 @@ std::vector<AudioTrack*> Playlist::getTracks() const {
         current = current->next;
     }
     return tracks;
+}
+
+void Playlist::reset(std::string new_name){
+    PlaylistNode* current = head;
+    while (current != nullptr) {
+        PlaylistNode* nextNode = current->next;
+        delete current;
+        current = nextNode;
+    }
+    track_count = 0;
+    head=0;
+    playlist_name = std::move(new_name);
 }
 

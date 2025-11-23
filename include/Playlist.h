@@ -89,7 +89,10 @@ public:
      */
     std::vector<AudioTrack*> getTracks() const;
 
-    void reset_playlist(std::string new_name);
+    /**
+     * Helper function: Reset the playlist with a new name
+     */
+    void reset(std::string new_name);
 };
 
 

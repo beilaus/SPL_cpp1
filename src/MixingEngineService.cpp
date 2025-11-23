@@ -32,7 +32,7 @@ MixingEngineService::~MixingEngineService() {
  */
 int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     // Your implementation here
-    std::cout<<"\n=== Loading Track to Deck ===";
+    std::cout<<"\n=== Loading Track to Deck ===" <<"\n";
     if(!decks[0] && !decks[1]){
         active_deck = 0;
         PointerWrapper<AudioTrack> cloned = track.clone();
@@ -51,7 +51,7 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
         return -1;
     }
     size_t target_deck=1-active_deck;
-    std::cout<<"[Deck Switch] Target deck: "<<target_deck<<"/n";
+    std::cout<<"[Deck Switch] Target deck: "<<target_deck<<"\n";
     if(decks[target_deck]!=nullptr){
         delete decks[target_deck];
         decks[target_deck]=nullptr;
