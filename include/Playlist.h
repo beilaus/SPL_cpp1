@@ -20,6 +20,8 @@ struct PlaylistNode {
     PlaylistNode* next;
 
     PlaylistNode(AudioTrack* t) : track(t), next(nullptr) {}
+    PlaylistNode(const PlaylistNode&) = delete; //disabling copy constructor
+    PlaylistNode& operator=(const PlaylistNode&) = delete; //disabling copy assignment 
     ~PlaylistNode(){
         delete track;
     }
@@ -42,6 +44,9 @@ public:
      */
     ~Playlist();
     
+    Playlist(const Playlist& other);
+    Playlist& operator=(const Playlist&) = delete; //disabling copy assignment
+
 
     /**
      * Add a track to the playlist

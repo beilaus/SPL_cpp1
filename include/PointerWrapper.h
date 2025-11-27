@@ -64,8 +64,7 @@ public:
      */
     PointerWrapper(PointerWrapper&& other) noexcept:  ptr(other.ptr)
     {
-       
-        other.ptr=0;
+        other.ptr=nullptr;
     }
 
     /**
@@ -77,7 +76,7 @@ public:
         if(this!=&other){
             delete ptr;
             ptr=other.ptr;
-            other.ptr=0;
+            other.ptr=nullptr;
         }
         return *this;
     }

@@ -42,8 +42,7 @@ AudioTrack::~AudioTrack() {
 
 AudioTrack::AudioTrack(const AudioTrack& other):
  title(other.title), artists(other.artists), duration_seconds(other.duration_seconds), bpm(other.bpm), 
-   waveform_size(other.waveform_size), waveform_data(nullptr)
-
+   waveform_data(nullptr), waveform_size(other.waveform_size)
 {
     // TODO: Implement the copy constructor
     #ifdef DEBUG
@@ -85,13 +84,15 @@ AudioTrack::AudioTrack(AudioTrack&& other) noexcept
     // TODO: Implement the move constructor
 
     // Your code here...-
-    :  waveform_data(other.waveform_data), title(std::move(other.title)),artists(std::move(other.artists)), duration_seconds(other.duration_seconds),
-    bpm(other.bpm),waveform_size(other.waveform_size)
+    :  title(std::move(other.title)), artists(std::move(other.artists)),
+     duration_seconds(other.duration_seconds),
+    bpm(other.bpm), waveform_data(other.waveform_data),
+     waveform_size(other.waveform_size)
 {
         #ifdef DEBUG
     std::cout << "AudioTrack move constructor called for: " << other.title << std::endl;
     #endif
-     other.waveform_data=0;
+     other.waveform_data=nullptr;
 }
 
 AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
@@ -102,16 +103,19 @@ AudioTrack& AudioTrack::operator=(AudioTrack&& other) noexcept {
     #endif
     // Your code here...
     if(this!=&other){
-    delete[]this->waveform_data;
-    this->waveform_data=other.waveform_data;
-    other.waveform_data=0;
-    this->title=std::move(other.title);
-    this->artists = std::move(other.artists); 
-    this->duration_seconds = other.duration_seconds;
-    this->bpm = other.bpm;
-    this->waveform_size = other.waveform_size;
+        delete[]this->waveform_data; //deleting previous data
+        this->waveform_data=other.waveform_data;
+        this->title=std::move(other.title);
+        this->artists = std::move(other.artists); 
+        this->duration_seconds = other.duration_seconds;
+        this->bpm = other.bpm;
+        this->waveform_size = other.waveform_size;
+
+        other.waveform_data=nullptr;
+        other.waveform_size=0;
+    }
     return *this;
-}}
+}
 
 void AudioTrack::get_waveform_copy(double* buffer, size_t buffer_size) const {
     if (buffer && waveform_data && buffer_size <= waveform_size) {

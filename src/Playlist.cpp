@@ -2,6 +2,7 @@
 #include "AudioTrack.h"
 #include <iostream>
 #include <algorithm>
+#include "PointerWrapper.h"
 Playlist::Playlist(const std::string& name) 
     : head(nullptr), playlist_name(name), track_count(0) {
     std::cout << "Created playlist: " << name << std::endl;
@@ -14,6 +15,22 @@ Playlist::~Playlist() {
         PlaylistNode* nextNode = current->next;
         delete current;
         current = nextNode;
+    }
+}
+Playlist::Playlist(const Playlist& other)
+    : head(nullptr), playlist_name(other.playlist_name), track_count(0) {
+    if (!other.head) return;
+    PointerWrapper<AudioTrack> head_clone = other.head->track->clone();
+    head = new PlaylistNode(head_clone.release());
+    track_count++;
+    PlaylistNode* curr = head;
+    PlaylistNode* curr_other = other.head->next;
+    while (curr_other) {
+        PointerWrapper<AudioTrack> track_clone = curr_other->track->clone();
+        curr->next = new PlaylistNode(track_clone.release());
+        curr = curr->next;
+        curr_other = curr_other->next;
+        track_count++;
     }
 }
 

@@ -7,7 +7,7 @@
  * TODO: Implement MixingEngineService constructor
  */
 MixingEngineService::MixingEngineService()
-    : active_deck(1), auto_sync(false), bpm_tolerance(0), decks()
+    : decks(), active_deck(1), auto_sync(false), bpm_tolerance(0)
     {
         decks[0]=nullptr;
         decks[1]=nullptr;
@@ -18,6 +18,7 @@ MixingEngineService::MixingEngineService()
  * TODO: Implement MixingEngineService destructor
  */
 MixingEngineService::~MixingEngineService() {
+    std::cout << "[MixingEngineService] Cleaning up decks...\n";
     delete decks[0];
     delete decks[1];
     decks[0]=nullptr;
