@@ -60,6 +60,11 @@ void WAVTrack::analyze_beatgrid() {
 
 
 PointerWrapper<AudioTrack> WAVTrack::clone() const {
-    // TODO: Implement the clone method
-   return PointerWrapper<AudioTrack>(new WAVTrack(*this));
+   try {
+        WAVTrack* newTrack = new WAVTrack(*this);
+        return PointerWrapper<AudioTrack>(newTrack);
+    }
+    catch (const std::bad_alloc& e) {
+        return PointerWrapper<AudioTrack>(); 
+    }
 }
