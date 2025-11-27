@@ -7,7 +7,7 @@
  * TODO: Implement MixingEngineService constructor
  */
 MixingEngineService::MixingEngineService()
-    : active_deck(0), auto_sync(false), bpm_tolerance(0)
+    : active_deck(1), auto_sync(false), bpm_tolerance(0), decks()
     {
         decks[0]=nullptr;
         decks[1]=nullptr;
