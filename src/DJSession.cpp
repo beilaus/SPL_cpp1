@@ -72,7 +72,7 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
         return 0;
     }
     else{
-        std::cout<< "[System] Loading track "<< track_name <<" to controller.." << std::endl;
+        std::cout<< "[System] Loading track '"<< track_name <<"' to controller..." << std::endl;
         int toLoad = controller_service.loadTrackToCache(*toFind); 
         if (toLoad==1)
             stats.cache_hits++;
@@ -80,6 +80,7 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
             stats.cache_misses++;
         else 
             stats.cache_misses++ , stats.cache_evictions++;
+        //controller_service.displayCacheStatus();
         return toLoad;
     }
 
@@ -94,7 +95,7 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
 bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
     AudioTrack* retrieved = controller_service.getTrackFromCache(track_title);
     if(!retrieved){
-        std::cout <<" [ERROR] Track: " <<track_title<< " not found in cache" <<std::endl;
+        std::cout <<"[ERROR] Track: " <<track_title<< " not found in cache" <<std::endl;
         stats.errors++;
         return false;
     }
@@ -113,9 +114,10 @@ bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
         }
         else {
             stats.errors++;  
-            std::cout <<" [ERROR] Track: " <<track_title<< " failed to load to the deck" <<std::endl;         
+            std::cout <<"[ERROR] Track: " <<track_title<< " failed to load to the deck" <<std::endl;         
             return false;
         }
+        //mixing_service.displayDeckStatus();
     }
 
     
@@ -157,10 +159,10 @@ void DJSession::simulate_dj_performance() {
         for(const std::string& name:sortedPlaylistNames){
             bool added=load_playlist(name);
             if(!added)
-                std::cout<<" [ERROR] failed to load playlist" << std::endl;
+                std::cout<<"[ERROR] failed to load playlist" << std::endl;
             else{
                 for(const std::string& track:track_titles){
-                    std::cout << "\n–- Processing: "<< track << "–-" << std::endl;
+                    std::cout << "\n--- Processing: "<< track << " ---" << std::endl;
                     stats.tracks_processed++;
                     load_track_to_controller(track);
                     load_track_to_mixer_deck(track); //iteration will continue either way. 
@@ -193,7 +195,7 @@ void DJSession::simulate_dj_performance() {
                 added=load_playlist(interactivePlaylist);
             }   
             for(const std::string& track:track_titles){
-                std::cout << "\n–- Processing: "<< track << "–-" << "\n";
+                std::cout << "\n--- Processing: "<< track << " ---\n";
                 stats.tracks_processed++;
                 load_track_to_controller(track);
                 load_track_to_mixer_deck(track); 

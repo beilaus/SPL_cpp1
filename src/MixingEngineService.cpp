@@ -34,17 +34,22 @@ MixingEngineService::~MixingEngineService() {
 int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     // Your implementation here
     std::cout<<"\n=== Loading Track to Deck ===" <<"\n";
+    bool first = false;
     if(!decks[0] && !decks[1]){
-        active_deck = 0;
-        PointerWrapper<AudioTrack> cloned = track.clone();
-        AudioTrack* clonePtr = cloned.release();
-        if(clonePtr==nullptr){
-            std::cout << "[ERROR] Track:  " << track.get_title() << " failed to clone" <<"\n";
-            return -1;
-        }
-        decks[0]=clonePtr;
-        return 0;
+        first = true;
     }
+    // if(!decks[0] && !decks[1]){
+    //     active_deck = 0;
+    //     PointerWrapper<AudioTrack> cloned = track.clone();
+    //     AudioTrack* clonePtr = cloned.release();
+    //     if(clonePtr==nullptr){
+    //         std::cout << "[ERROR] Track:  " << track.get_title() << " failed to clone" <<"\n"; //no need for this due to updated logic.
+    //         return -1;
+    //     }
+    //     decks[0]=clonePtr;
+        
+    //     return 0;
+    // }
     PointerWrapper<AudioTrack>cloned=track.clone();
     AudioTrack* clonePtr = cloned.get();
     if(clonePtr==nullptr){
@@ -66,10 +71,12 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
         }
     }
     decks[target_deck]=cloned.release();
-    std::cout<< "[Load Complete] \"" <<decks[target_deck]->get_title() <<"\" is now loaded on deck "<<target_deck<<"\n";
-    std::cout<<"[Unload] Unloading previous deck "<< active_deck<<"\" ("<< decks[active_deck]->get_title()<<")\n";
-    delete decks[active_deck];
-    decks[active_deck]=nullptr;
+    std::cout<< "[Load Complete] '" <<decks[target_deck]->get_title() <<"' is now loaded on deck "<<target_deck<<"\n";
+    if(!first){
+        std::cout<<"[Unload] Unloading previous deck "<< active_deck<<" ("<< decks[active_deck]->get_title()<<")\n";
+        delete decks[active_deck];
+        decks[active_deck]=nullptr;
+    }
     active_deck=target_deck;
     std::cout<<"[Active Deck] Switched to deck "<<target_deck<<"\n";
     return target_deck;
