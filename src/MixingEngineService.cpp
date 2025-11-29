@@ -64,7 +64,8 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     }
     clonePtr->load();
     clonePtr->analyze_beatgrid();
-    if(decks[active_deck]!=nullptr && auto_sync){
+    //decks[active_deck]!=nullptr && ===== Logic flaw that I removed because it doesn't match the print.txt
+    if(auto_sync && !first){
         int bpm_diff= std::abs(clonePtr->get_bpm()-decks[active_deck]->get_bpm());
         if(bpm_diff>=bpm_tolerance){
             sync_bpm(cloned);
@@ -113,7 +114,8 @@ void MixingEngineService::displayDeckStatus() const {
  * @param track: Track to synchronize with active deck
  */
 void MixingEngineService::sync_bpm(const PointerWrapper<AudioTrack>& track) const {
-    if(track&&decks[active_deck]!=nullptr){
+    //  && decks[active_deck]!=nullptr
+    if(track){
        int original=track->get_bpm();
        int new_bpm=(original+decks[active_deck]->get_bpm())/2;
        (*track).set_bpm(new_bpm);
