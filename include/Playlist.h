@@ -46,6 +46,7 @@ public:
     
     Playlist(const Playlist& other);
     Playlist& operator=(const Playlist&) = delete; //disabling copy assignment
+    Playlist& operator=(Playlist&& other) noexcept;
 
 
     /**
@@ -94,10 +95,10 @@ public:
      */
     std::vector<AudioTrack*> getTracks() const;
 
-    /**
-     * Helper function: Reset the playlist with a new name
-     */
-    void reset(std::string new_name);
+    // /**
+    //  * Helper function: Reset the playlist with a new name
+    //  */
+    // void reset(std::string new_name);
 };
 
 

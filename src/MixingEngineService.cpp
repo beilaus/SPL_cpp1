@@ -11,7 +11,7 @@ MixingEngineService::MixingEngineService()
     {
         decks[0]=nullptr;
         decks[1]=nullptr;
-        std::cout<<"[MixingEngineService] Initialized with 2 empty decks.";
+        std::cout<<"[MixingEngineService] Initialized with 2 empty decks.\n";
     }
 
 /**

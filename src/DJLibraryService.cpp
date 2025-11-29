@@ -24,15 +24,15 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
         if(track_current.type=="MP3"){
             MP3Track* curr=new MP3Track(track_current.title,track_current.artists, track_current.duration_seconds,track_current.bpm,track_current.extra_param1,track_current.extra_param2);
             library.push_back(curr);
-            std::cout<<"MP3: MP3Track created: "<<track_current.extra_param1<<"kbps\n";
+            std::cout<<"MP3Track created: "<<track_current.extra_param1<<" kbps\n";
         }
         else{
             WAVTrack* curr = new WAVTrack(track_current.title,track_current.artists, track_current.duration_seconds,track_current.bpm,track_current.extra_param1,track_current.extra_param2);
             library.push_back(curr);
-            std::cout<<"WAV: WAVTrack created: "<<track_current.extra_param1<<"Hz/"<<track_current.extra_param2<<"bit\n";
+            std::cout<<"WAVTrack created: "<<track_current.extra_param1<<"Hz/"<<track_current.extra_param2<<"bit\n";
         }
     }
-    std::cout<<"[INFO] Track library built: "<<library_tracks.size()<<"tracks loaded\n";
+    std::cout<<"[INFO] Track library built: "<<library_tracks.size()<<" tracks loaded\n";
   }
 
 /**
@@ -76,7 +76,8 @@ AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
     std::cout << "[INFO] Loading playlist: " << playlist_name << std::endl;
-    playlist.reset(playlist_name); //helper function to reset playlist
+    // playlist.reset(playlist_name); //helper function to reset playlist
+    playlist = Playlist(playlist_name);
     int counter = 0; //Counting tracks added
     int size = library.size();
     for(int lib_index : track_indices){
