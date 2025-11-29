@@ -38,18 +38,6 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     if(!decks[0] && !decks[1]){
         first = true;
     }
-    // if(!decks[0] && !decks[1]){
-    //     active_deck = 0;
-    //     PointerWrapper<AudioTrack> cloned = track.clone();
-    //     AudioTrack* clonePtr = cloned.release();
-    //     if(clonePtr==nullptr){
-    //         std::cout << "[ERROR] Track:  " << track.get_title() << " failed to clone" <<"\n"; //no need for this due to updated logic.
-    //         return -1;
-    //     }
-    //     decks[0]=clonePtr;
-        
-    //     return 0;
-    // }
     PointerWrapper<AudioTrack>cloned=track.clone();
     AudioTrack* clonePtr = cloned.get();
     if(clonePtr==nullptr){
@@ -64,8 +52,8 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     }
     clonePtr->load();
     clonePtr->analyze_beatgrid();
-    //decks[active_deck]!=nullptr && ===== Logic flaw that I removed because it doesn't match the print.txt
-    if(auto_sync && !first){
+    //decks[active_deck]!=nullptr && auto_sync &&  ===== Logic flaw that I removed because it doesn't match the print.txt
+    if(!first && auto_sync){
         int bpm_diff= std::abs(clonePtr->get_bpm()-decks[active_deck]->get_bpm());
         if(bpm_diff>=bpm_tolerance){
             sync_bpm(cloned);
@@ -99,27 +87,17 @@ void MixingEngineService::displayDeckStatus() const {
     std::cout << "===================\n";
 }
 
-/**
- * TODO: Implement can_mix_tracks method
- * 
- * Check if two tracks can be mixed based on BPM difference.
- * 
- * @param track: Track to check for mixing compatibility
- * @return: true if BPM difference <= tolerance, false otherwise
- */
-
 
 /**
  * TODO: Implement sync_bpm method
  * @param track: Track to synchronize with active deck
  */
 void MixingEngineService::sync_bpm(const PointerWrapper<AudioTrack>& track) const {
-    //  && decks[active_deck]!=nullptr
     if(track){
        int original=track->get_bpm();
-       int new_bpm=(original+decks[active_deck]->get_bpm())/2;
-       (*track).set_bpm(new_bpm);
-        std::cout<<"[Sync BPM] Syncing BPM from "<< original<<" to "<< new_bpm<<"\n";
+       int new_bpm= (original+decks[active_deck]->get_bpm()) /2;
+       track->set_bpm(new_bpm);
+        std::cout<<"[Sync BPM] Syncing BPM from "<< original <<" to "<< new_bpm<<"\n";
     }
 }
 
