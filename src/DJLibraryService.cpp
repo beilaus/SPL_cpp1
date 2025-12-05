@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <filesystem>
+#include <algorithm>
 
 
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
@@ -114,5 +115,6 @@ std::vector<std::string> DJLibraryService::getTrackTitles() const {
     for(AudioTrack* trackptr:tracks){
         titles.push_back(trackptr->get_title());
     }
+    std::reverse(titles.begin(), titles.end());
     return titles;
 }
